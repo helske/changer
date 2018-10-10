@@ -1,0 +1,20 @@
+Package: changer
+Type: Package
+Title: Change R Package Name
+Version: 0.0.1
+Date: 2018-10-10
+Description: Changing the name of an existing R package is annoying but common task 
+  especially in the early stages of package development. This package (mostly) automates this task.
+License: GPL (>= 2)
+Imports:
+    available,
+    devtools,
+    git2r
+Encoding: UTF-8
+RoxygenNote: 6.1.0
+Authors@R: 
+    person(given = "Jouni",
+           family = "Helske",
+           role = c("aut", "cre"),
+           email = "jouni.helske@iki.fi",
+           comment = c(ORCID = "0000-0001-7130-793X"))
