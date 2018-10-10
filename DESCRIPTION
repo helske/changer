@@ -18,3 +18,5 @@ Authors@R:
            role = c("aut", "cre"),
            email = "jouni.helske@iki.fi",
            comment = c(ORCID = "0000-0001-7130-793X"))
+URL: https://github.com/helske/changer
+BugReports: https://github.com/helske/changer/issues
