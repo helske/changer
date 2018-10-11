@@ -32,6 +32,7 @@
 #' @param run_roxygen Should the package documentation be updated via roxygen? If \code{TRUE}, removes all old \code{Rd} files 
 #' in \code{man} directory.
 #' @param remote_name Name of the remote. Defaults to \code{git2r::remotes(repo)[1]}.
+#' @export
 changer <- function(path, new_name,  check_validity = TRUE, change_git = TRUE, run_roxygen = FALSE, remote_name = NULL) {
   
   if (!file.exists(f <- path)) 
