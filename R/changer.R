@@ -2,15 +2,7 @@
 #' 
 #' Changing the name of an existing R package is annoying but common task 
 #' especially in the early stages of package development. Function \code{changer} 
-#' tries to automate this task:
-#' 
-#' First all complete words matching the package name are replaced in all R scripts, 
-#' C/C++/Fortran/Stan source codes, markdown files (essentially files with extension 
-#' \code{R}, \code{r}, \code{cpp}, \code{c}, \code{h},
-#' \code{f}, \code{f90}, \code{f95}, \code{stan}, \code{md}, \code{Rmd}, \code{Rnw}, \code{html}, 
-#' or \code{bib}), as well as \code{DESCRIPTION}, \code{NAMESPACE}, \code{ints/CITATION}, 
-#' \code{.Rbuildignore}, and \code{.gitignore} files.
-#' 
+#' tries to automate this task. See README for more information. 
 #' 
 #' Note that if the package is already published in CRAN, then the name change 
 #' is more problematic (you need to ask CRAN for permission first).
@@ -62,13 +54,13 @@ changer <- function(path, new_name,  check_validity = TRUE, change_git = TRUE, r
   
   # all files and dirs:
   R_files <- list.files(path, all.files = TRUE, recursive = TRUE, include.dirs = FALSE, 
-                        full.names = TRUE, pattern = "\\(.R|.r)$")
+                        ignore.case = TRUE, full.names = TRUE, pattern = "\\R$")
   c_or_cpp_files <- list.files(path, all.files = TRUE, recursive = TRUE, include.dirs = FALSE, 
-                               full.names = TRUE, pattern = "\\.(cpp|c|h)$")
+                               ignore.case = TRUE, full.names = TRUE, pattern = "\\.(cpp|c|h)$")
   fortran_files <- list.files(path, all.files = TRUE, recursive = TRUE, include.dirs = FALSE, 
-                              full.names = TRUE, pattern = "\\.(f|f90|f95)$")
+                              ignore.case = TRUE, full.names = TRUE, pattern = "\\.(f|f90|f95)$")
   stan_files <- list.files(path, all.files = TRUE, recursive = TRUE, include.dirs = FALSE, 
-                           full.names = TRUE, pattern = "\\.(stan)$")
+                           full.names = TRUE, pattern = "\\.stan$")
   md_files <- list.files(path, all.files = TRUE, recursive = TRUE, include.dirs = FALSE, 
                          full.names = TRUE, pattern = "\\.(md|Rmd|Rnw|html|bib)$")
   
@@ -89,6 +81,9 @@ changer <- function(path, new_name,  check_validity = TRUE, change_git = TRUE, r
   if (file.exists(f <- file.path(path, paste0(old_name, ".Rproj")))) {
     file.rename(f, file.path(path, paste0(new_name, ".Rproj")))
   }
+  if (file.exists(f <- file.path(path, "R", paste0(old_name, ".R")))) {
+    file.rename(f, file.path(path, "R", paste0(new_name, ".R")))
+  }
   if (file.exists(f <- file.path(path, "src", paste0(old_name, ".c")))) {
     file.rename(f, file.path(path, "src", paste0(new_name, ".c")))
   }
@@ -98,8 +93,29 @@ changer <- function(path, new_name,  check_validity = TRUE, change_git = TRUE, r
   if (file.exists(f <- file.path(path, "src",  paste0(old_name, ".h")))) {
     file.rename(f,  file.path(path, "src",  paste0(new_name, ".h")))
   }
+  if (file.exists(f <- file.path(path, "src",  paste0(old_name, ".f")))) {
+    file.rename(f,  file.path(path, "src",  paste0(new_name, ".f")))
+  }
+  if (file.exists(f <- file.path(path, "src",  paste0(old_name, ".f90")))) {
+    file.rename(f,  file.path(path, "src",  paste0(new_name, ".f90")))
+  }
+  if (file.exists(f <- file.path(path, "src",  paste0(old_name, ".f95")))) {
+    file.rename(f,  file.path(path, "src",  paste0(new_name, ".f95")))
+  }
+  if (file.exists(f <- file.path(path, "exec",  paste0(old_name, ".stan")))) {
+    file.rename(f,  file.path(path, "exec",  paste0(new_name, ".stan")))
+  }
+  if (file.exists(f <- file.path(path, "vignettes",  paste0(old_name, ".md")))) {
+    file.rename(f, file.path(path, "vignettes",  paste0(new_name, ".md")))
+  }
+  if (file.exists(f <- file.path(path,  paste0(old_name, ".md")))) {
+    file.rename(f, file.path(path,  paste0(new_name, ".md")))
+  }
   if (file.exists(f <- file.path(path, "vignettes",  paste0(old_name, ".Rmd")))) {
     file.rename(f, file.path(path, "vignettes",  paste0(new_name, ".Rmd")))
+  }  
+  if (file.exists(f <- file.path(path,  paste0(old_name, ".Rmd")))) {
+    file.rename(f, file.path(path,  paste0(new_name, ".Rmd")))
   }
   if (file.exists(f <- file.path(path, "vignettes",  paste0(old_name, ".Rnw")))) {
     file.rename(f, file.path(path, "vignettes",  paste0(new_name, ".Rnw")))
@@ -148,7 +164,7 @@ changer <- function(path, new_name,  check_validity = TRUE, change_git = TRUE, r
     system2("mv", args = c("-T", normalizePath(path), new_name))
   }
   
-  if (!is.null(change_git)) {
+  if (change_git) {
     repo <- git2r::repository(path)
     remote <- git2r::remote_url(repo)
     if (is.null(remote_name)) remote_name <- git2r::remotes(repo)[1]
@@ -159,6 +175,7 @@ changer <- function(path, new_name,  check_validity = TRUE, change_git = TRUE, r
   # but fetching the token from Github website takes
   # same amount of time as renaming via website...
   # calling system curl doesn't activate prompt in Windows..
+  # Maybe we could check whether user has set GitHub token?
   # if (grepl("github.com", remote)) {
   #   split_repo <- strsplit(remote, "/")[[1]]
   #   owner <- split_repo[length(split_repo) - 1]

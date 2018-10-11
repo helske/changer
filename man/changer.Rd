@@ -27,16 +27,9 @@ in \code{man} directory.}
 \description{
 Changing the name of an existing R package is annoying but common task 
 especially in the early stages of package development. Function \code{changer} 
-tries to automate this task:
+tries to automate this task. See README for more information.
 }
 \details{
-First all complete words matching the package name are replaced in all R scripts, 
-C/C++/Fortran/Stan source codes, markdown files (essentially files with extension 
-\code{R}, \code{r}, \code{cpp}, \code{c}, \code{h},
-\code{f}, \code{f90}, \code{f95}, \code{stan}, \code{md}, \code{Rmd}, \code{Rnw}, \code{html}, 
-or \code{bib}), as well as \code{DESCRIPTION}, \code{NAMESPACE}, \code{ints/CITATION}, 
-\code{.Rbuildignore}, and \code{.gitignore} files.
-
 Note that if the package is already published in CRAN, then the name change 
 is more problematic (you need to ask CRAN for permission first).
 
