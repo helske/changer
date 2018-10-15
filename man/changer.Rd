@@ -51,6 +51,7 @@ It is strongly recommended to have a backup backup before proceeding.
 Inspired by Nick Tierney's blog post: https://www.njtierney.com/post/2017/10/27/change-pkg-name/
 }
 \examples{
+content <- letters
 package.skeleton("package.with.boring.name", path = tempdir())
 readLines(file.path(tempdir(), "package.with.boring.name", "DESCRIPTION"))
 
