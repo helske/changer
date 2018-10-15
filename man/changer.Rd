@@ -5,7 +5,7 @@
 \title{Change Name of Existing R Package}
 \usage{
 changer(path, new_name, check_validity = TRUE, change_git = TRUE,
-  run_roxygen = FALSE, remote_name = NULL)
+  run_roxygen = FALSE, remote_name = NULL, ask = TRUE)
 }
 \arguments{
 \item{path}{Path of the package.}
@@ -23,6 +23,8 @@ Go to the URL of your Github package, click Settings, change the name under "Rep
 in \code{man} directory.}
 
 \item{remote_name}{Name of the remote. Defaults to \code{git2r::remotes(repo)[1]}.}
+
+\item{ask}{Ask confirmation before starting the rename process. Default is TRUE.}
 }
 \description{
 Changing the name of an existing R package is annoying but common task 
@@ -47,4 +49,14 @@ If you have a function with same name as your package, that will change as well.
 It is strongly recommended to have a backup backup before proceeding.
 
 Inspired by Nick Tierney's blog post: https://www.njtierney.com/post/2017/10/27/change-pkg-name/
+}
+\examples{
+package.skeleton("package.with.boring.name", path = tempdir())
+readLines(file.path(tempdir(), "package.with.boring.name", "DESCRIPTION"))
+
+changer(file.path(tempdir(), "package.with.boring.name"), 
+  "superpack<<", check_validity = FALSE, ask = FALSE)
+readLines(file.path(tempdir(), "superpack", "DESCRIPTION"))
+unlink(file.path(tempdir(), "superpack"), recursive = TRUE)
+
 }

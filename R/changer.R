@@ -32,8 +32,18 @@
 #' @param run_roxygen Should the package documentation be updated via roxygen? If \code{TRUE}, removes all old \code{Rd} files 
 #' in \code{man} directory.
 #' @param remote_name Name of the remote. Defaults to \code{git2r::remotes(repo)[1]}.
+#' @param ask Ask confirmation before starting the rename process. Default is TRUE.
 #' @export
-changer <- function(path, new_name,  check_validity = TRUE, change_git = TRUE, run_roxygen = FALSE, remote_name = NULL) {
+#' @examples 
+#' package.skeleton("package.with.boring.name", path = tempdir())
+#' readLines(file.path(tempdir(), "package.with.boring.name", "DESCRIPTION"))
+#' 
+#' changer(file.path(tempdir(), "package.with.boring.name"), 
+#'   "superpack<<", check_validity = FALSE, ask = FALSE)
+#' readLines(file.path(tempdir(), "superpack", "DESCRIPTION"))
+#' unlink(file.path(tempdir(), "superpack"), recursive = TRUE)
+#' 
+changer <- function(path, new_name,  check_validity = TRUE, change_git = TRUE, run_roxygen = FALSE, remote_name = NULL, ask = TRUE) {
   
   if (!file.exists(f <- path)) 
     stop(paste0("Path '", f, "' does not exist. "))
@@ -42,10 +52,10 @@ changer <- function(path, new_name,  check_validity = TRUE, change_git = TRUE, r
     valid <- available::available(new_name, browse = FALSE)
     print(valid)
   }
-  
-  keep_going <- utils::askYesNo(paste0("Warning! This function modifies the contents and names of the files within the path '", path, "'. Do you wish to continue?"))
-  
-  if (isFALSE(keep_going)) return()
+  if (ask) {
+    keep_going <- utils::askYesNo(paste0("Warning! This function modifies the contents and names of the files within the path '", path, "'. Do you wish to continue?"))
+    if (isFALSE(keep_going)) return()
+  } 
   
   split_path <- strsplit(path, .Platform$file.sep)[[1]]
   old_name <- split_path[length(split_path)]
@@ -65,7 +75,8 @@ changer <- function(path, new_name,  check_validity = TRUE, change_git = TRUE, r
   md_files <- list.files(path, all.files = TRUE, recursive = TRUE, include.dirs = FALSE, 
                          full.names = TRUE, pattern = "\\.(md|Rmd|Rnw|html|bib)$")
   
-  files <- c(R_files, c_or_cpp_files, fortran_files, stan_files, md_files, "DESCRIPTION", "NAMESPACE",
+  files <- c(R_files, c_or_cpp_files, fortran_files, stan_files, md_files, 
+             file.path(path, "DESCRIPTION"), file.path(path, "NAMESPACE"),
              if (file.exists(paste(path, ".Rbuildignore", .Platform$file.sep))) paste0(path, "/.Rbuildignore"), 
              if (file.exists(paste(path, ".gitignore", .Platform$file.sep))) paste0(path, "/.gitignore"),
              if (file.exists(paste(path, "inst/CITATION", .Platform$file.sep))) paste0(path, "/inst/CITATION"))
@@ -164,9 +175,9 @@ changer <- function(path, new_name,  check_validity = TRUE, change_git = TRUE, r
   } else {
     system2("mv", args = c("-T", normalizePath(path), new_name))
   }
-  
-  if (change_git) {
-    repo <- git2r::repository(path)
+  new_path <- file.path(split_path[-length(split_path)], new_name)
+  if (change_git & !is.null(p <- git2r::discover_repository(new_path))) {
+    repo <- git2r::repository(p, FALSE)
     remote <- git2r::remote_url(repo)
     if (is.null(remote_name)) remote_name <- git2r::remotes(repo)[1]
     git2r::remote_set_url(repo, name = remote_name, newname = gsub(old_name, new_name, remote))
@@ -188,7 +199,7 @@ changer <- function(path, new_name,  check_validity = TRUE, change_git = TRUE, r
   }
   
   if (run_roxygen) {
-    devtools::document(roclets = 
+    devtools::document(pkg = new_path, roclets = 
                          c("namespace", "rd", 
                            if (any(grepl("Collate", c(readLines("DESCRIPTION"))))) "collate"))
   }
