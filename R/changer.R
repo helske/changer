@@ -175,7 +175,7 @@ changer <- function(path, new_name,  check_validity = TRUE, change_git = TRUE, r
   } else {
     system2("mv", args = c("-T", normalizePath(path), new_name))
   }
-  new_path <- file.path(dirname, new_name)
+  new_path <- file.path(dir_path, new_name)
   if (change_git & !is.null(p <- git2r::discover_repository(new_path))) {
     repo <- git2r::repository(p, FALSE)
     remote <- git2r::remote_url(repo)
