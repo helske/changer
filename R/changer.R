@@ -35,11 +35,12 @@
 #' @param ask Ask confirmation before starting the rename process. Default is TRUE.
 #' @export
 #' @examples 
+#' content <- letters
 #' package.skeleton("package.with.boring.name", path = tempdir())
 #' readLines(file.path(tempdir(), "package.with.boring.name", "DESCRIPTION"))
 #' 
 #' changer(file.path(tempdir(), "package.with.boring.name"), 
-#'   "superpack<<", check_validity = FALSE, ask = FALSE)
+#'   "superpack", check_validity = FALSE, ask = FALSE)
 #' readLines(file.path(tempdir(), "superpack", "DESCRIPTION"))
 #' unlink(file.path(tempdir(), "superpack"), recursive = TRUE)
 #' 
@@ -57,10 +58,9 @@ changer <- function(path, new_name,  check_validity = TRUE, change_git = TRUE, r
     if (isFALSE(keep_going)) return()
   } 
   
-  split_path <- strsplit(path, .Platform$file.sep)[[1]]
-  old_name <- split_path[length(split_path)]
-  
-  if (file.exists(f <- file.path(utils::head(split_path, length(split_path) - 1), new_name))) 
+  dir_path <- dirname(path)
+  old_name <- basename(path)
+  if (file.exists(f <- file.path(dir_path, new_name))) 
     stop(paste0("Path '", f, "' already exists. "))
   
   # all files and dirs:
@@ -77,9 +77,9 @@ changer <- function(path, new_name,  check_validity = TRUE, change_git = TRUE, r
   
   files <- c(R_files, c_or_cpp_files, fortran_files, stan_files, md_files, 
              file.path(path, "DESCRIPTION"), file.path(path, "NAMESPACE"),
-             if (file.exists(paste(path, ".Rbuildignore", .Platform$file.sep))) paste0(path, "/.Rbuildignore"), 
-             if (file.exists(paste(path, ".gitignore", .Platform$file.sep))) paste0(path, "/.gitignore"),
-             if (file.exists(paste(path, "inst/CITATION", .Platform$file.sep))) paste0(path, "/inst/CITATION"))
+             if (file.exists(f <- paste(path, ".Rbuildignore", .Platform$file.sep))) f, 
+             if (file.exists(f <- paste(path, ".gitignore", .Platform$file.sep))) f,
+             if (file.exists(f <- paste(path, "inst/CITATION", .Platform$file.sep))) f)
   
   # change contents
   pattern <- paste0('\\b', old_name, '\\b')
@@ -175,7 +175,7 @@ changer <- function(path, new_name,  check_validity = TRUE, change_git = TRUE, r
   } else {
     system2("mv", args = c("-T", normalizePath(path), new_name))
   }
-  new_path <- file.path(split_path[-length(split_path)], new_name)
+  new_path <- file.path(dirname, new_name)
   if (change_git & !is.null(p <- git2r::discover_repository(new_path))) {
     repo <- git2r::repository(p, FALSE)
     remote <- git2r::remote_url(repo)
