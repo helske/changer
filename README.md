@@ -3,13 +3,11 @@
 Changing the name of an existing R package is annoying but common task in the early stages of package development (at least for me). Package `changer` tries to automate this task:
 
 1.  Validity and availability of the new package name is checked by using `available` from [available](https://CRAN.R-project.org/package=available)). 
-2.  All complete words matching the package name are replaced in all R scripts,
+2.  *All* complete words matching the package name are replaced in all R scripts,
     C/C++/Fortran/Stan source codes, markdown files, and typical files in R packages,
     i.e. files with extension `.R`, `.cpp`, `.c`, `.h`, `.f`, `.f90`, `.f95`, `.stan`, `.md`, `.Rmd`, `.Rnw`, 
     `.html`, and `.bib`, as well as files `DESCRIPTION`, `NAMESPACE` `inst/CITATION`, `.Rbuildignore`,
-    and `gitignore`. *If the name of your package is a real word 
-    (e.g. [walker](https://CRAN.R-project.org/package=walker)), and it is used also in this context 
-    (e.g. [darts](https://CRAN.R-project.org/package=darts )), then you are screwed.*
+    and `gitignore`.
     
 3.  Change file names containing the package name. Only checks files with extensions listed above,
     as well as files `[oldname].Rproj`, `[oldname]-package.R`, `[oldname]-defunct.R`, and `[oldname]-deprecated.R`.
