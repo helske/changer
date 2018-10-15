@@ -1,4 +1,5 @@
 # changer
+[![Build Status](https://travis-ci.org/helske/changer.png?branch=master)](https://travis-ci.org/helske/changer)
 
 Changing the name of an existing R package is annoying but common task in the early stages of package development (at least for me). Package `changer` tries to automate this task:
 
