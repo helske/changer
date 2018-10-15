@@ -49,6 +49,8 @@ changer <- function(path, new_name,  check_validity = TRUE, change_git = TRUE, r
   if (!file.exists(f <- path)) 
     stop(paste0("Path '", f, "' does not exist. "))
   
+
+  
   if (check_validity) {
     valid <- available::available(new_name, browse = FALSE)
     print(valid)
@@ -60,8 +62,8 @@ changer <- function(path, new_name,  check_validity = TRUE, change_git = TRUE, r
   
   dir_path <- dirname(path)
   old_name <- basename(path)
-  if (file.exists(f <- file.path(dir_path, new_name))) 
-    stop(paste0("Path '", f, "' already exists. "))
+  if (file.exists(new_path <- file.path(dir_path, new_name))) 
+    stop(paste0("Path '", new_path, "' already exists. "))
   
   # all files and dirs:
   R_files <- list.files(path, all.files = TRUE, recursive = TRUE, include.dirs = FALSE, 
@@ -170,11 +172,11 @@ changer <- function(path, new_name,  check_validity = TRUE, change_git = TRUE, r
   }
   
   # rename directory
-  new_path <- file.path(dir_path, new_name)
+
   if (.Platform$OS.type == "windows") {
     shell(paste("rename", utils::shortPathName(normalizePath(path)), new_name))
   } else {
-    system2("mv", args = c("-T", path, new_path))
+    system2("mv", args = c(path, new_path))
   }
   
   if (change_git & !is.null(p <- git2r::discover_repository(new_path))) {
