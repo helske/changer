@@ -44,7 +44,7 @@
 #' readLines(file.path(tempdir(), "superpack", "DESCRIPTION"))
 #' unlink(file.path(tempdir(), "superpack"), recursive = TRUE)
 #' 
-changer <- function(path, new_name,  check_validity = TRUE, change_git = TRUE, run_roxygen = FALSE, remote_name = NULL, ask = TRUE) {
+changer <- function(path, new_name, check_validity = TRUE, change_git = TRUE, run_roxygen = FALSE, remote_name = NULL, ask = TRUE) {
   
   if (!file.exists(f <- path)) 
     stop(paste0("Path '", f, "' does not exist. "))

@@ -4,7 +4,7 @@ Title: Change R Package Name
 Version: 0.0.1
 Date: 2018-10-10
 Description: Changing the name of an existing R package is annoying but common task 
-  especially in the early stages of package development. This package (mostly) automates this task.
+    especially in the early stages of package development. This package (mostly) automates this task.
 License: GPL (>= 2)
 Imports:
     available,
