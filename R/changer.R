@@ -40,7 +40,7 @@
 #' readLines(file.path(tempdir(), "package.with.boring.name", "DESCRIPTION"))
 #' 
 #' changer(file.path(tempdir(), "package.with.boring.name"), 
-#'   new_name = "superpack", check_validity = FALSE, ask = FALSErh)
+#'   new_name = "superpack", check_validity = FALSE, ask = FALSE)
 #' readLines(file.path(tempdir(), "superpack", "DESCRIPTION"))
 #' unlink(file.path(tempdir(), "superpack"), recursive = TRUE)
 #' 
@@ -170,12 +170,13 @@ changer <- function(path, new_name, check_validity = TRUE, change_git = TRUE, ru
   }
   
   # rename directory
+  new_path <- file.path(dir_path, new_name)
   if (.Platform$OS.type == "windows") {
     shell(paste("rename", utils::shortPathName(normalizePath(path)), new_name))
   } else {
-    system2("mv", args = c("-T", normalizePath(path), new_name))
+    system2("mv", args = c("-T", path, new_path))
   }
-  new_path <- file.path(dir_path, new_name)
+  
   if (change_git & !is.null(p <- git2r::discover_repository(new_path))) {
     repo <- git2r::repository(p, FALSE)
     remote <- git2r::remote_url(repo)
