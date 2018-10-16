@@ -79,9 +79,10 @@ changer <- function(path, new_name, check_validity = TRUE, change_git = TRUE, ru
   
   files <- c(R_files, c_or_cpp_files, fortran_files, stan_files, md_files, 
              file.path(path, "DESCRIPTION"), file.path(path, "NAMESPACE"),
-             if (file.exists(f <- paste(path, ".Rbuildignore", .Platform$file.sep))) f, 
-             if (file.exists(f <- paste(path, ".gitignore", .Platform$file.sep))) f,
-             if (file.exists(f <- paste(path, "inst/CITATION", .Platform$file.sep))) f)
+             if (file.exists(f <- file.path(path, ".Rbuildignore"))) f, 
+             if (file.exists(f <- file.path(path, ".gitignore"))) f,
+             if (file.exists(f <- file.path(path, "inst/CITATION"))) f,
+             if (file.exists(f <- file.path(path, paste0(old_name, ".Rproj")))) f)
   
   # change contents
   pattern <- paste0('\\b', old_name, '\\b')
