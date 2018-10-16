@@ -183,7 +183,7 @@ changer <- function(path, new_name, check_validity = TRUE, change_git = TRUE, ru
     repo <- git2r::repository(p, FALSE)
     remote <- git2r::remote_url(repo)
     if (is.null(remote_name)) remote_name <- git2r::remotes(repo)[1]
-    git2r::remote_set_url(repo, name = remote_name, newname = gsub(old_name, new_name, remote))
+    git2r::remote_set_url(repo, name = remote_name, url = gsub(old_name, new_name, remote))
     
   # change repo name in GitHub
   # Can you do this securely? Maybe with tokens,
