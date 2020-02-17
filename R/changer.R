@@ -25,7 +25,8 @@
 #' @param path Path of the package.
 #' @param new_name Desired name of the package.
 #' @param check_validity Check first if the package name is valid and available by running the 
-#' function \code{available} from the package \code{available} Default is TRUE.
+#' function \code{available} from the package \code{available} Default is TRUE. This will prompt a warning about
+#' potentially offensive results from Urban Dictionary which is used to check the validity of the package name.
 #' @param change_git If \code{TRUE} (default), changes the remote url of the remote. Note that
 #' you still need to change the name of the GitHub repository manually as follows: 
 #' Go to the URL of your Github package, click Settings, change the name under "Repository name", and click Rename.
