@@ -173,6 +173,11 @@ changer <- function(path, new_name, check_validity = TRUE, change_git = TRUE, ru
     file.remove(f)
   }
   
+  # warning on detecting rda files in data
+  if (file.exists(f <- file.path(path, "data", paste0(old_name, ".rda")))) {
+    warning(".rda files were detected in data/. Load and resave these files.")
+  }
+             
   # rename directory
 
   if (.Platform$OS.type == "windows") {
