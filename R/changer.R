@@ -47,6 +47,7 @@
 #' 
 changer <- function(path, new_name, check_validity = TRUE, change_git = TRUE, run_roxygen = FALSE, remote_name = NULL, ask = TRUE) {
   
+  path <- normalizePath(path)
   if (!file.exists(f <- path)) 
     stop(paste0("Path '", f, "' does not exist. "))
   
@@ -57,7 +58,7 @@ changer <- function(path, new_name, check_validity = TRUE, change_git = TRUE, ru
     print(valid)
   }
   if (ask) {
-    keep_going <- utils::askYesNo(paste0("Warning! This function modifies the contents and names of the files within the path '", normalizePath(path), "'. Do you wish to continue?"))
+    keep_going <- utils::askYesNo(paste0("Warning! This function modifies the contents and names of the files within the path '", path, "'. Do you wish to continue?"))
     if (isFALSE(keep_going)) return()
   } 
   
@@ -67,7 +68,7 @@ changer <- function(path, new_name, check_validity = TRUE, change_git = TRUE, ru
     stop(paste0("Path '", new_path, "' already exists. "))
   
   # check that the path actually contains R package
-  if(!file.exists(paste0(normalizePath(path), "/DESCRIPTION")))
+  if(!file.exists(paste0(path, "/DESCRIPTION")))
     stop("The path does not seem point to an R package as there is no DESCRIPTION file present.")
   
   # all files and dirs:
