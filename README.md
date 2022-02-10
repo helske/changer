@@ -46,3 +46,7 @@ There is just one function in the package:
 changer("../mypackagewithlongandboringname", "Rbitary")
 ```
 
+## News
+
+- `changer` now tests that the suplied path actually contains an R package by checking the existence of the `DESCRIPTION` file.
+

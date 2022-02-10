@@ -18,7 +18,7 @@
 #' 
 #' If you have a function with same name as your package, that will change as well.
 #' 
-#' It is strongly recommended to have a backup backup before proceeding.
+#' It is strongly recommended to make backups before proceeding.
 #' 
 #' Inspired by Nick Tierney's blog post: https://www.njtierney.com/post/2017/10/27/change-pkg-name/
 #' 
@@ -32,7 +32,7 @@
 #' Go to the URL of your Github package, click Settings, change the name under "Repository name", and click Rename.
 #' @param run_roxygen Should the package documentation be updated via roxygen? If \code{TRUE}, removes all old \code{Rd} files 
 #' in \code{man} directory.
-#' @param remote_name Name of the remote. Defaults to \code{git2r::remotes(repo)[1]}.
+#' @param remote_name Name of the remote. Defaults to \code{git2r::remotes(path)[1]}.
 #' @param ask Ask confirmation before starting the rename process. Default is TRUE.
 #' @export
 #' @examples 
@@ -57,7 +57,7 @@ changer <- function(path, new_name, check_validity = TRUE, change_git = TRUE, ru
     print(valid)
   }
   if (ask) {
-    keep_going <- utils::askYesNo(paste0("Warning! This function modifies the contents and names of the files within the path '", path, "'. Do you wish to continue?"))
+    keep_going <- utils::askYesNo(paste0("Warning! This function modifies the contents and names of the files within the path '", normalizePath(path), "'. Do you wish to continue?"))
     if (isFALSE(keep_going)) return()
   } 
   
@@ -65,6 +65,10 @@ changer <- function(path, new_name, check_validity = TRUE, change_git = TRUE, ru
   old_name <- basename(path)
   if (file.exists(new_path <- file.path(dir_path, new_name))) 
     stop(paste0("Path '", new_path, "' already exists. "))
+  
+  # check that the path actually contains R package
+  if(!file.exists(paste0(normalizePath(path), "/DESCRIPTION")))
+    stop("The path does not seem point to an R package as there is no DESCRIPTION file present.")
   
   # all files and dirs:
   R_files <- list.files(path, all.files = TRUE, recursive = TRUE, include.dirs = FALSE, 
