@@ -4,8 +4,15 @@
 \alias{changer}
 \title{Change Name of Existing R Package}
 \usage{
-changer(path, new_name, check_validity = TRUE, change_git = TRUE,
-  run_roxygen = FALSE, remote_name = NULL, ask = TRUE)
+changer(
+  path,
+  new_name,
+  check_validity = TRUE,
+  change_git = TRUE,
+  run_roxygen = FALSE,
+  remote_name = NULL,
+  ask = TRUE
+)
 }
 \arguments{
 \item{path}{Path of the package.}
@@ -13,7 +20,8 @@ changer(path, new_name, check_validity = TRUE, change_git = TRUE,
 \item{new_name}{Desired name of the package.}
 
 \item{check_validity}{Check first if the package name is valid and available by running the 
-function \code{available} from the package \code{available} Default is TRUE.}
+function \code{available} from the package \code{available} Default is TRUE. This will prompt a warning about
+potentially offensive results from Urban Dictionary which is used to check the validity of the package name.}
 
 \item{change_git}{If \code{TRUE} (default), changes the remote url of the remote. Note that
 you still need to change the name of the GitHub repository manually as follows: 
@@ -22,7 +30,7 @@ Go to the URL of your Github package, click Settings, change the name under "Rep
 \item{run_roxygen}{Should the package documentation be updated via roxygen? If \code{TRUE}, removes all old \code{Rd} files 
 in \code{man} directory.}
 
-\item{remote_name}{Name of the remote. Defaults to \code{git2r::remotes(repo)[1]}.}
+\item{remote_name}{Name of the remote. Defaults to \code{git2r::remotes(path)[1]}.}
 
 \item{ask}{Ask confirmation before starting the rename process. Default is TRUE.}
 }
@@ -39,14 +47,14 @@ If the package is also available in Github, then you need to do the following:
 
 Go to the URL of your Github package, click Settings near the top-right, change the name under "Repository name", and finally click Rename.
 
-Warnings:
+Warnings: 
 
 If the current name of your package is just some commonly used word (such as "package"), then you are in trouble, as 
-find and replace will change all of those words to \code{new_name} as well.
+find and replace will change all of those words to \code{new_name} as well. 
 
 If you have a function with same name as your package, that will change as well.
 
-It is strongly recommended to have a backup backup before proceeding.
+It is strongly recommended to make backups before proceeding.
 
 Inspired by Nick Tierney's blog post: https://www.njtierney.com/post/2017/10/27/change-pkg-name/
 }

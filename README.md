@@ -52,4 +52,5 @@ changer("../mypackagewithlongandboringname", "Rbitary")
 ## News
 
 - `changer` now tests that the suplied path actually contains an R package by checking the existence of the `DESCRIPTION` file.
+- yaml files are also checked, and warning is given regarding the rda files, thanks to Mahmoud Ahmed.
 
