@@ -77,8 +77,10 @@ changer <- function(path, new_name, check_validity = TRUE, change_git = TRUE, ru
                            full.names = TRUE, pattern = "\\.stan$")
   md_files <- list.files(path, all.files = TRUE, recursive = TRUE, include.dirs = FALSE, 
                          full.names = TRUE, pattern = "\\.(md|Rmd|Rnw|html|bib)$")
+  yml_files <- list.files(path, all.files = TRUE, recursive = TRUE, include.dirs = FALSE, 
+                         full.names = TRUE, pattern = "\\.(yml|yaml)$")
   
-  files <- c(R_files, c_or_cpp_files, fortran_files, stan_files, md_files, 
+  files <- c(R_files, c_or_cpp_files, fortran_files, stan_files, md_files, yml_files,
              file.path(path, "DESCRIPTION"), file.path(path, "NAMESPACE"),
              if (file.exists(f <- file.path(path, ".Rbuildignore"))) f, 
              if (file.exists(f <- file.path(path, ".gitignore"))) f,
@@ -154,7 +156,13 @@ changer <- function(path, new_name, check_validity = TRUE, change_git = TRUE, ru
   if (file.exists(f <- file.path(path, "R", paste0(old_name, "-deprecated.R")))) {
     file.rename(f, file.path(path, "R", paste0(new_name, "-deprecated.R")))
   }
-  
+  if (file.exists(f <- file.path(path,  paste0(old_name, ".yml")))) {
+    file.rename(f, file.path(path,  paste0(new_name, ".yml")))
+  }
+  if (file.exists(f <- file.path(path,  paste0(old_name, ".yaml")))) {
+    file.rename(f, file.path(path,  paste0(new_name, ".yaml")))
+  }
+             
   if (run_roxygen) {
     # remove old Rd files
     Rd_files <- list.files(file.path(path, "man"), pattern = "\\.(Rd)$", full.names = TRUE)
