@@ -25,7 +25,7 @@ Changing the name of an existing R package is annoying but common task in the ea
 
 
 
-Inspired by back-and-forth naming of the package [particlefields](https://github.com/helske/particlefields)) and [Nick Tierney's blog post]( https://www.njtierney.com/post/2017/10/27/change-pkg-name/).
+Inspired by back-and-forth naming of the package [particlefield](https://github.com/helske/particlefield)) and [Nick Tierney's blog post]( https://www.njtierney.com/post/2017/10/27/change-pkg-name/).
 
 
 ## Additional issues (read above as well)
