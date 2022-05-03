@@ -34,6 +34,8 @@
 #' in \code{man} directory.
 #' @param remote_name Name of the remote. Defaults to \code{git2r::remotes(path)[1]}.
 #' @param ask Ask confirmation before starting the rename process. Default is TRUE.
+#' @param replace_all If \code{TRUE}, replace all occurences of the old package name in files, 
+#' also in parts of the word. Default is \code{FALSE}, so only whole words are replaced.
 #' @export
 #' @examples 
 #' content <- letters
@@ -45,7 +47,8 @@
 #' readLines(file.path(tempdir(), "superpack", "DESCRIPTION"))
 #' unlink(file.path(tempdir(), "superpack"), recursive = TRUE)
 #' 
-changer <- function(path, new_name, check_validity = TRUE, change_git = TRUE, run_roxygen = FALSE, remote_name = NULL, ask = TRUE) {
+changer <- function(path, new_name, check_validity = TRUE, change_git = TRUE, 
+  run_roxygen = FALSE, remote_name = NULL, ask = TRUE, replace_all = FALSE) {
   
   path <- normalizePath(path)
   if (!file.exists(f <- path)) 
@@ -73,7 +76,7 @@ changer <- function(path, new_name, check_validity = TRUE, change_git = TRUE, ru
   
   # all files and dirs:
   R_files <- list.files(path, all.files = TRUE, recursive = TRUE, include.dirs = FALSE, 
-                        ignore.case = TRUE, full.names = TRUE, pattern = "\\R$")
+                        ignore.case = TRUE, full.names = TRUE, pattern = "\\.R$")
   c_or_cpp_files <- list.files(path, all.files = TRUE, recursive = TRUE, include.dirs = FALSE, 
                                ignore.case = TRUE, full.names = TRUE, pattern = "\\.(cpp|c|h)$")
   fortran_files <- list.files(path, all.files = TRUE, recursive = TRUE, include.dirs = FALSE, 
@@ -94,6 +97,7 @@ changer <- function(path, new_name, check_validity = TRUE, change_git = TRUE, ru
   
   # change contents
   pattern <- paste0('\\b', old_name, '\\b')
+  if (replace_all) pattern <- old_name
   for (f in files) {
     old_content <- readLines(f)
     new_content <- gsub(pattern, new_name, old_content)

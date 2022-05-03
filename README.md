@@ -10,8 +10,7 @@ Changing the name of an existing R package is annoying but common task in the ea
 2.  *All* complete words matching the package name are replaced in all R scripts,
     C/C++/Fortran/Stan source codes, markdown files, and typical files in R packages,
     i.e. files with extension `.R`, `.cpp`, `.c`, `.h`, `.f`, `.f90`, `.f95`, `.stan`, `.md`, `.Rmd`, `.Rnw`, 
-    `.html`, and `.bib`, as well as files `DESCRIPTION`, `NAMESPACE` `inst/CITATION`, `.Rbuildignore`,
-    and `gitignore`.
+    `.html`, `.yaml`, `.yml`, and `.bib`, as well as files `DESCRIPTION`, `NAMESPACE` `inst/CITATION`, `.Rbuildignore`, and `gitignore`.
     
 3.  Change file names containing the package name. Only checks files with extensions listed above,
     as well as files `[oldname].Rproj`, `[oldname]-package.R`, `[oldname]-defunct.R`, and `[oldname]-deprecated.R`.
@@ -34,6 +33,8 @@ Inspired by back-and-forth naming of the package [particlefield](https://github.
 
 * It is strongly recommended to have a backup backup before proceeding.
 
+* Note that if the old package name is a common word, it will be replaced in the docs etc as well!
+
 ## Installation
 
 You can install the developed version of changer from Github with:
@@ -51,6 +52,12 @@ changer("../mypackagewithlongandboringname", "Rbitary")
 
 ## News
 
-- `changer` now tests that the suplied path actually contains an R package by checking the existence of the `DESCRIPTION` file.
+### May 2022
+- Fixed a major bug, now actually replaces the package name in the `.R` files!
+- With additional argument `replace_all` you can now replace also partial 
+  matches instead of just the whole word matches.
+
+### February 2022
+- `changer` now tests that the supplied path actually contains an R package by checking the existence of the `DESCRIPTION` file.
 - yaml files are also checked, and warning is given regarding the rda files, thanks to Mahmoud Ahmed.
 

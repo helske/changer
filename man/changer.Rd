@@ -11,7 +11,8 @@ changer(
   change_git = TRUE,
   run_roxygen = FALSE,
   remote_name = NULL,
-  ask = TRUE
+  ask = TRUE,
+  replace_all = FALSE
 )
 }
 \arguments{
@@ -33,6 +34,9 @@ in \code{man} directory.}
 \item{remote_name}{Name of the remote. Defaults to \code{git2r::remotes(path)[1]}.}
 
 \item{ask}{Ask confirmation before starting the rename process. Default is TRUE.}
+
+\item{replace_all}{If \code{TRUE}, replace all occurences of the old package name in files, 
+also in parts of the word. Default is \code{FALSE}, so only whole words are replaced.}
 }
 \description{
 Changing the name of an existing R package is annoying but common task 
